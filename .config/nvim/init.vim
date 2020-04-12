@@ -18,6 +18,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'kovetskiy/sxhkd-vim'
+Plug 'will133/vim-dirdiff'
 call plug#end()
 
 set bg=light
@@ -37,6 +38,9 @@ set clipboard+=unnamedplus
 	set wildmode=longest,list,full
 " Disables automatic commenting on newline:
 	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" DirDiff plugin uses enhanced mappings like <leader>dg <leader>dp <leader>dj <leader>dk
+	let g:DirDiffEnableMappings = 1
 
 " Goyo plugin makes text more readable when writing prose:
 	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
