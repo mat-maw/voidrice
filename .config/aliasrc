@@ -1,19 +1,39 @@
 #!/bin/sh
 
-# Use neovim for vim if present.
-command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d"
-
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
+	ka="killall" \
 	bat="cat /sys/class/power_supply/BAT?/capacity" \
 	cp="cp -iv" \
 	mv="mv -iv" \
 	rm="rm -v" \
 	mkd="mkdir -pv" \
-	yt="youtube-dl --add-metadata -i" \
+	mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)" \
+	calcurse="calcurse -D ~/.config/calcurse" \
+	magit="nvim -c MagitOnly" \
+	p="sudo pacman" \
+	SS="sudo systemctl" \
+	f="$FILE" \
+	g="git" \
+	trem="transmission-remote" \
+	e="$EDITOR" \
+	v="$EDITOR" \
+	x="sxiv -ft *" \
+	sdn="sudo shutdown -h now" \
+	gua="git remote | xargs -L1 git push --all" \
+	ls="ls -hN --color=auto --group-directories-first" \
+	grep="grep --color=auto" \
+	diff="diff --color=auto" \
+	ccat="highlight --out-format=ansi" \
+	yt="youtube-dl --add-metadata -i -o '%(upload_date)s-%(title)s.%(ext)s'" \
 	yta="yt -x -f bestaudio/best" \
+	YT="youtube-viewer" \
+	ref="shortcuts >/dev/null; source ~/.config/shortcutrc" \
+	upc="sudo pacman -Syu; pkill -RTMIN+8 i3blocks" \
+	lsp="pacman -Qett --color=always | less" \
 	ffmpeg="ffmpeg -hide_banner"
 
+command -v nvim >/dev/null && alias vim="nvim" vimdiff="nvim -d" # Use neovim for vim if present.
 # Colorize commands when possible.
 alias \
 	ls="ls -hN --color=auto --group-directories-first" \
@@ -21,26 +41,30 @@ alias \
 	diff="diff --color=auto" \
 	ccat="highlight --out-format=ansi"
 
-# These common commands are just too long! Abbreviate them.
-alias \
-	ka="killall" \
-	g="git" \
-	trem="transmission-remote" \
-	YT="youtube-viewer" \
-	sdn="sudo shutdown -h now" \
-	f="$FILE" \
-	e="$EDITOR" \
-	v="$EDITOR" \
-	p="sudo pacman" \
-	xi="sudo xbps-install" \
-	xr="sudo xbps-remove -R" \
-	xq="xbps-query"
 
-# This alias is important. It enables the `pauseallmpv` command.
-alias mpv="mpv --input-ipc-server=/tmp/mpvsoc$(date +%s)"
+vf() { fzf | xargs -r -I % $EDITOR % ;}
 
-# Some other stuff
-alias \
-	magit="nvim -c MagitOnly" \
-	ref="shortcuts >/dev/null; source ~/.config/shortcutrc" \
-	weath="less -S ~/.local/share/weatherreport" \
+################## own scripts:	###########################
+# extData related
+alias mntExtData='sudo cryptsetup luksOpen /dev/disk/by-uuid/63b8095e-b0b1-423b-ac7d-ec13e77c7eae extData && sudo mount /dev/mapper/extData /mnt/extData'
+alias umntExtData='sudo umount /mnt/extData && sudo cryptsetup luksClose /dev/mapper/extData'
+alias backupHomedir='rsync -av --delete "$HOME" "/mnt/extData/Daten/SK-Homedir/" >> "$HOME/Zu_Sichern/Log_BackupHomeDir/HomeToExtData_LOG-`date +%Y-%m-%d-%X`" 2>&1'
+alias backupExtDataToExtDataBackup1='rsync -av --delete  "/mnt/extData/Daten/" "/mnt/extDataBackup1/Daten" >> "$HOME/Zu_Sichern/Log_Backup_ExtData-to-ExtDataBackup1/Log_Backup_ExtData-to-ExtDataBackup1-`date +%Y-%m-%d-%X`" 2>&1'
+
+
+alias mntExtDataBackup1='/home/mat/bin/scripts/mountExtDataBackup1.sh'
+alias umntExtDataBackup1='/home/mat/bin/scripts/unmountExtDataBackup1.sh'
+
+alias mntExtVid='/home/mat/bin/scripts/mountExtVid.sh'
+alias umntExtVid='/home/mat/bin/scripts/unmountExtVid.sh'
+
+alias mntExtMixedBackup1='/home/mat/bin/scripts/mountExtMixedBackup1.sh'
+alias umntExtMixedBackup1='/home/mat/bin/scripts/unmountExtMixedBackup1.sh'
+
+alias backupExtDataToMixedBackup1='rsync -av --delete  "/mnt/extData/Daten/" "/mnt/extMixedBackup1/extDataBackup/Daten" >> "$HOME/Zu_Sichern/Log_Backup_ExtData-to-ExtMixedBackup1/Log_Backup_ExtData-to-ExtMixedBackup1-`date +%Y-%m-%d-%X`" 2>&1'
+
+#Handy related
+alias handyBackupWA='adb pull /storage/self/primary/WhatsApp/Media/Whatsapp\ Images/'
+alias handyBackupCam='adb pull /storage/self/primary/DCIM/Camera/'
+alias handyBackupScreens='adb pull /storage/self/primary/Pictures/'
+alias handyBackupThreemaPics='adb pull /storage/self/primary/Threema Pictures/'
